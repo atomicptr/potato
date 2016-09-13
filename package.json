@@ -1,7 +1,7 @@
 {
     "name": "potato-pack",
     "version": "0.2.0",
-    "description": "A tool to pack a json file structure into one BSON file",
+    "description": "A tool to pack a file based json database into one big file, with potatoes.",
     "scripts": {
         "watch": "coffee -o dist -cw src",
         "compile": "coffee -o dist -c src",
@@ -21,6 +21,10 @@
         "potato": "bin/potato"
     },
     "preferGlobal": true,
+    "repository": {
+        "type" : "git",
+        "url" : "https://github.com/atomic/potato.git"
+    },
     "author": "Christopher Kaster <atomicptr@gmail.com>",
     "license": "MIT"
 }
