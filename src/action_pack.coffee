@@ -5,6 +5,8 @@ glob = require "glob"
 
 nestedObject = require("./utils").nestedObject
 
+packageJson = require "../package.json"
+
 BSON = new bson.BSONPure.BSON()
 
 module.exports = (directories, cmd) ->
@@ -12,6 +14,7 @@ module.exports = (directories, cmd) ->
         absolutePath = path.resolve process.cwd(), dir
 
         obj = {}
+        obj.__potato = version: packageJson.version, timestamp: new Date().getTime()
         objName = path.basename dir
 
         outputPath = if cmd.output? then cmd.output else "."
@@ -55,6 +58,7 @@ module.exports = (directories, cmd) ->
             parts = file.split("/").slice(0, file.split("/").length - 1)
 
             content = JSON.parse(fs.readFileSync(path.resolve absolutePath, file))
+            content.__potato_isfile = true
 
             if parts.length == 0
                 # put it in base
