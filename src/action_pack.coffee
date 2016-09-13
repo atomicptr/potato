@@ -10,13 +10,6 @@ BSON = new bson.BSONPure.BSON()
 module.exports = (directories, cmd) ->
     for dir in directories
         absolutePath = path.resolve process.cwd(), dir
-        if not fs.existsSync(absolutePath)
-            console.error "Can't find a directory called \"#{dir}.\". (Absolute Path: #{absolutePath})"
-            continue
-
-        if not fs.lstatSync(absolutePath).isDirectory()
-            console.error "#{dir} is not a directory, can't make a potato out of it."
-            continue
 
         obj = {}
         objName = path.basename dir
@@ -24,13 +17,31 @@ module.exports = (directories, cmd) ->
         outputPath = if cmd.output? then cmd.output else "."
         packAsJson = cmd.asJson?
         quiet = cmd.quiet?
+        panic = cmd.panic?
+        stdout = cmd.stdout?
+
+        if stdout
+            quiet = true
+            panic = true
+
+        if not fs.existsSync(absolutePath)
+            console.error "Can't find a directory called \"#{dir}.\". (Absolute Path: #{absolutePath})"
+            if panic
+                process.exit 1
+            continue
+
+        if not fs.lstatSync(absolutePath).isDirectory()
+            console.error "#{dir} is not a directory, can't make a potato out of it."
+            if panic
+                process.exit 1
+            continue
+
+        if not quiet
+            console.log "Trying to pack: #{absolutePath}"
 
         globOptions =
             cwd: path.resolve(absolutePath),
             matchBase: true
-
-        if not quiet
-            console.log "Trying to pack: #{absolutePath}"
 
         files = glob.sync "*.json", globOptions
 
@@ -65,8 +76,13 @@ module.exports = (directories, cmd) ->
         makeCallback = (outputFile) -> (err) ->
             if err?
                 console.error "ERROR: Could not write file #{outputFile}\n#{err}"
+                if panic
+                    process.exit 1
                 return
             if not quiet
                 console.log "DONE. You can find the packed resource at #{outputFile}"
 
-        fs.writeFile outputFile, data, makeCallback(outputFile)
+        if not stdout
+            fs.writeFile outputFile, data, makeCallback(outputFile)
+        else
+            process.stdout.write(data)
