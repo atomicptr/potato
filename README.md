@@ -1,6 +1,6 @@
 # potato
 
-A tool to pack a file based json database into one big file.
+A tool to pack a file based json database into one big file, with potatoes.
 
 ## Install
 
@@ -49,6 +49,20 @@ which will create a folder structure in "dest/". And yes this part was totally c
 ### How to use the packed data
 
 At the moment there is no implementation for .potato files (derp). Need to do that at some point too...
+
+The content of the .potato file is basically a gzip compressed BSON file. If you take the example structure from above the content of that BSON file would look like this in JSON:
+
+```
+{
+    "items": {
+        "sword": content of swords.json,
+        "shield": content of shield.json
+    },
+    "assets": {
+        "img.asset.png": { data: base64 string of the asset... }
+    }
+}
+```
 
 ## License
 
