@@ -1,6 +1,7 @@
 bson = require "bson"
 path = require "path"
 fs = require "fs"
+zlib = require "zlib"
 rimraf = require "rimraf"
 mkdirp = require "mkdirp"
 
@@ -29,7 +30,7 @@ module.exports = (potatoFile, outputPath, cmd) ->
             if err?
                 console.error(err)
                 return
-            json = BSON.deserialize(data)
+            json = BSON.deserialize zlib.gunzipSync data
 
             unpackPath = path.resolve process.cwd(), outputPath, path.basename(potatoFile, ".potato")
 
@@ -58,11 +59,20 @@ module.exports = (potatoFile, outputPath, cmd) ->
                         content = Object.assign({}, obj[key])
                         delete content.__potato_isfile
 
-                        filePath = path.resolve(outputPath, "#{key}.json")
+                        filePath = null
+                        data = null
+
+                        if obj[key].__potato_isasset?
+                            filePath = path.resolve(outputPath, key)
+                            data = new Buffer(obj[key].data, "base64");
+                        else
+                            filePath = path.resolve(outputPath, "#{key}.json")
+                            data = JSON.stringify(content, null, "    ")
+
                         if not quiet
                             console.log "\tunpacked #{filePath}"
 
-                        fs.writeFileSync filePath, JSON.stringify(content, null, "    ")
+                        fs.writeFileSync filePath, data
                     else # is not a file
                         createObjects(path.resolve(outputPath, key), obj[key])
 

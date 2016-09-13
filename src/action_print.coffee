@@ -1,6 +1,7 @@
 bson = require "bson"
 path = require "path"
 fs = require "fs"
+zlib = require "zlib"
 
 nestedObject = require("./utils").nestedObject
 
@@ -18,6 +19,6 @@ module.exports = (potatoFile, cmd) ->
             if err?
                 console.error(err)
                 return
-            json = BSON.deserialize(data)
+            json = BSON.deserialize zlib.gunzipSync data
 
             console.log(JSON.stringify(json, null, "    "))

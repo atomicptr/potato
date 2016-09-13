@@ -2,6 +2,7 @@ bson = require "bson"
 path = require "path"
 fs = require "fs"
 glob = require "glob"
+zlib = require "zlib"
 
 nestedObject = require("./utils").nestedObject
 
@@ -47,17 +48,31 @@ module.exports = (directories, cmd) ->
             matchBase: true
 
         files = glob.sync "*.json", globOptions
+        assets = glob.sync "*.asset.*", globOptions
+
+        filesAndAssets = files.concat(assets)
 
         if not quiet
-            console.log "\tfound #{files.length} files..."
+            console.log "\tfound #{filesAndAssets.length} files..."
 
-        for file in files
+        for file in filesAndAssets
             if not quiet
                 console.log "\tpacking #{path.resolve dir, file}..."
 
             parts = file.split("/").slice(0, file.split("/").length - 1)
 
-            content = JSON.parse(fs.readFileSync(path.resolve absolutePath, file))
+            content = null
+
+            fileContent = fs.readFileSync(path.resolve absolutePath, file)
+
+            # If the file is an asset
+            if assets.indexOf(file) > -1
+                content = data: fileContent.toString("base64")
+                content.__potato_isasset = true # TODO: remember file type
+                content.__potato_filetype = path.extname file
+            else
+                content = JSON.parse(fileContent)
+
             content.__potato_isfile = true
 
             if parts.length == 0
@@ -86,7 +101,9 @@ module.exports = (directories, cmd) ->
             if not quiet
                 console.log "DONE. You can find the packed resource at #{outputFile}"
 
+        compressedData = if not packAsJson then zlib.gzipSync(data) else data
+
         if not stdout
-            fs.writeFile outputFile, data, makeCallback(outputFile)
+            fs.writeFile outputFile, compressedData, makeCallback(outputFile)
         else
-            process.stdout.write(data)
+            process.stdout.write(compressedData)
