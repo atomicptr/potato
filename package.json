@@ -4,7 +4,8 @@
     "description": "A tool to pack a json file structure into one BSON file",
     "scripts": {
         "watch": "coffee -o dist -cw src",
-        "compile": "coffee -o dist -c src"
+        "compile": "coffee -o dist -c src",
+        "prepublish": "coffee -o dist -c src"
     },
     "dependencies": {
         "bson": "^0.5.4",
@@ -15,7 +16,7 @@
         "coffee-script": "*"
     },
     "bin": {
-        "potato": "dist/potato.js"
+        "potato": "bin/potato"
     },
     "preferGlobal": true,
     "author": "Christopher Kaster <atomicptr@gmail.com>",
