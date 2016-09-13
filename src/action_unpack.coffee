@@ -40,10 +40,12 @@ module.exports = (potatoFile, outputPath, cmd) ->
                 return
 
             if alreadyExists and force
-                console.log "Delete existing #{unpackPath}..."
+                if not quiet
+                    console.log "Delete existing #{unpackPath}..."
                 rimraf.sync(unpackPath)
 
-            console.log "Unpack contents to #{unpackPath}..."
+            if not quiet
+                console.log "Unpack contents to #{unpackPath}..."
 
             createObjects = (outputPath, obj) ->
                 mkdirp.sync(outputPath)
@@ -57,10 +59,13 @@ module.exports = (potatoFile, outputPath, cmd) ->
                         delete content.__potato_isfile
 
                         filePath = path.resolve(outputPath, "#{key}.json")
-                        console.log "\tunpacked #{filePath}"
+                        if not quiet
+                            console.log "\tunpacked #{filePath}"
 
                         fs.writeFileSync filePath, JSON.stringify(content, null, "    ")
                     else # is not a file
                         createObjects(path.resolve(outputPath, key), obj[key])
 
             createObjects unpackPath, json
+            if not quiet
+                console.log "DONE. Unpacked potato at #{unpackPath}"
