@@ -1,0 +1,8 @@
+{
+    "name": "Sword",
+    "stats": {
+        "atk": 13,
+        "fire": 15
+    },
+    "description": "A stupid example :)"
+}

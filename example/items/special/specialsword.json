@@ -1,0 +1,8 @@
+{
+    "name": "Special Sword",
+    "stats": {
+        "atk": 1337,
+        "def": 42
+    },
+    "description": "Another special example :)"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "potato",
+    "version": "0.0.1",
+    "description": "A tool to pack a json file structure into one BSON file",
+    "scripts": {
+        "watch": "coffee -o dist -cw src",
+        "compile": "coffee -o dist -c src"
+    },
+    "dependencies": {
+        "bson": "^0.5.4",
+        "commander": "^2.9.0",
+        "glob": "^7.0.6"
+    },
+    "devDependencies": {
+        "coffee-script": "*"
+    },
+    "bin": {
+        "potato": "dist/potato.js"
+    },
+    "preferGlobal": true,
+    "author": "Christopher Kaster <atomicptr@gmail.com>",
+    "license": "MIT"
+}
