@@ -1,3 +1,5 @@
+dist/*.json
+dist/*.potato
 
 # Created by https://www.gitignore.io/api/windows,macos,linux,coffeescript,node
 
@@ -62,11 +64,6 @@ Temporary Items
 
 # Linux trash folder which might appear on any partition or disk
 .Trash-*
-
-
-### CoffeeScript ###
-*.js
-
 
 ### Node ###
 # Logs
