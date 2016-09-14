@@ -48,10 +48,13 @@ which will create a folder structure in "dest/". And yes this part was totally c
 
 ### How to use the packed data
 
-At the moment there is no implementation for .potato files (derp). Need to do that at some point too...
+#### Implementations
 
-The content of the .potato file is basically a gzip compressed BSON file. If you take the example structure from above the content of that BSON file would look like this in JSON:
+* C# https://gist.github.com/atomicptr/484276c6d637be157213237d48181050
 
+#### Do it yourself
+
+The process of parsing a .potato file is very trivial. It's basically a gzip compressed BSON object which would look like this if it were a JSON object instead (assuming this is the file that was made from the structure above):
 ```
 {
     "items": {
@@ -60,7 +63,8 @@ The content of the .potato file is basically a gzip compressed BSON file. If you
     },
     "assets": {
         "img.asset.png": { data: base64 string of the asset... }
-    }
+    },
+
 }
 ```
 
