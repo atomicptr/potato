@@ -74,6 +74,10 @@ module.exports = (directories, cmd) ->
             else
                 content = JSON.parse(fileContent)
 
+                if Array.isArray(content)
+                    content = {data: content}
+                    content.__potato_isarray = true
+
             content.__potato_isfile = true
 
             if parts.length == 0

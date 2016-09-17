@@ -65,6 +65,9 @@ module.exports = (potatoFile, outputPath, cmd) ->
                         if obj[key].__potato_isasset?
                             filePath = path.resolve(outputPath, key)
                             data = new Buffer(obj[key].data, "base64");
+                        else if obj[key].__potato_isarray?
+                            filePath = path.resolve(outputPath, "#{key}.json")
+                            data = JSON.stringify(content.data, null, "    ")
                         else
                             filePath = path.resolve(outputPath, "#{key}.json")
                             data = JSON.stringify(content, null, "    ")
