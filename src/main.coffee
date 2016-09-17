@@ -15,6 +15,7 @@ module.exports = (args) ->
         .command "pack <directories...>"
         .option "--as-json", "Pack as .json file"
         .option "-o, --output <directory>", "Output Directory"
+        .option "--ignore-assets", "Ignores Asset files"
         .option "-q, --quiet", "No console output."
         .option "--panic", "Exit the program when an error occurs"
         .option "--stdout", "Print output to stdout instead of a file. This option auto enables also --panic and --quiet"

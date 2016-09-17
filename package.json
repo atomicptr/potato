@@ -1,6 +1,6 @@
 {
     "name": "potato-pack",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "A tool to pack a file based json database into one big file, with potatoes.",
     "scripts": {
         "watch": "coffee -o dist -cw src",

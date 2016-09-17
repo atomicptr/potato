@@ -23,6 +23,7 @@ module.exports = (directories, cmd) ->
         quiet = cmd.quiet?
         panic = cmd.panic?
         stdout = cmd.stdout?
+        ignoreAssets = cmd.ignoreAssets?
 
         if stdout
             quiet = true
@@ -50,7 +51,7 @@ module.exports = (directories, cmd) ->
         files = glob.sync "*.json", globOptions
         assets = glob.sync "*.asset.*", globOptions
 
-        filesAndAssets = files.concat(assets)
+        filesAndAssets = if ignoreAssets then files else files.concat(assets)
 
         if not quiet
             console.log "\tfound #{filesAndAssets.length} files..."
