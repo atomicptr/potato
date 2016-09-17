@@ -2,6 +2,7 @@ program = require "commander"
 
 packAction = require "./action_pack"
 unpackAction = require "./action_unpack"
+watchAction = require "./action_watch"
 printAction = require "./action_print"
 
 packageJson = require "../package.json"
@@ -26,6 +27,12 @@ module.exports = (args) ->
         .option "-q, --quiet", "No console output."
         .option "-f, --force", "If output directory already exists override it (Does not merge both structures)"
         .action unpackAction
+
+    program
+        .command "watch <directories...>"
+        .option "-o, --output <directory>", "Output Directory"
+        .option "--ignore-assets", "Ignores Asset files"
+        .action watchAction
 
     program
         .command "print <potatoFile>"

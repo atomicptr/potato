@@ -24,6 +24,7 @@ module.exports = (directories, cmd) ->
         panic = cmd.panic?
         stdout = cmd.stdout?
         ignoreAssets = cmd.ignoreAssets?
+        watchCallback = cmd.__watch_callback
 
         if stdout
             quiet = true
@@ -105,6 +106,9 @@ module.exports = (directories, cmd) ->
                 return
             if not quiet
                 console.log "DONE. You can find the packed resource at #{outputFile}"
+
+            if watchCallback?
+                watchCallback outputFile, filesAndAssets
 
         compressedData = if not packAsJson then zlib.gzipSync(data) else data
 
