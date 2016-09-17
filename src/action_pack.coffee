@@ -6,6 +6,8 @@ zlib = require "zlib"
 
 nestedObject = require("./utils").nestedObject
 
+Schema = require("./schema")
+
 packageJson = require "../package.json"
 
 BSON = new bson.BSONPure.BSON()
@@ -57,6 +59,8 @@ module.exports = (directories, cmd) ->
         if not quiet
             console.log "\tfound #{filesAndAssets.length} files..."
 
+        schema = {}
+
         for file in filesAndAssets
             if not quiet
                 console.log "\tpacking #{path.resolve dir, file}..."
@@ -65,7 +69,13 @@ module.exports = (directories, cmd) ->
 
             content = null
 
-            fileContent = fs.readFileSync(path.resolve absolutePath, file)
+            filePath = path.resolve absolutePath, file
+            fileContent = fs.readFileSync filePath
+
+            schemaPath = path.resolve path.dirname(filePath), "__potato_schema"
+
+            if fs.existsSync schemaPath
+                schema[schemaPath] ?= JSON.parse(fs.readFileSync schemaPath)
 
             # If the file is an asset
             if assets.indexOf(file) > -1
@@ -78,6 +88,12 @@ module.exports = (directories, cmd) ->
                 if Array.isArray(content)
                     content = {data: content}
                     content.__potato_isarray = true
+
+            if schema[schemaPath]? and not content.__potato_isarray and not content.__potato_isasset
+                if not Schema.isValid content, schema[schemaPath]
+                    console.error "ERROR: #{filePath} is not valid according to schema: #{schemaPath}"
+                    return
+
 
             content.__potato_isfile = true
 

@@ -1,0 +1,9 @@
+{
+    "name": "string!",
+    "stats": {
+        "atk": "number!",
+        "def": "number"
+    },
+    "description": "string",
+    "effects": "string[]"
+}
