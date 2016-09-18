@@ -1,3 +1,12 @@
+nestedObjectGetValue = (base, elements) ->
+    if elements.length == 0
+        return base
+
+    tmp = elements.slice(0)
+    first = tmp.shift()
+
+    return nestedObjectGetValue base[first], tmp
+
 nestedObject = (base, elements, value) ->
     if elements.length == 0
         return base
@@ -12,4 +21,5 @@ nestedObject = (base, elements, value) ->
     return base
 
 module.exports =
-    nestedObject: nestedObject
+    nestedObject: nestedObject,
+    nestedObjectGetValue: nestedObjectGetValue

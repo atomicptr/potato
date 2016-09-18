@@ -5,6 +5,8 @@ glob = require "glob"
 zlib = require "zlib"
 
 nestedObject = require("./utils").nestedObject
+nestedObjectGetValue = require("./utils").nestedObjectGetValue
+sortMetaData = require("./utils").sortMetaData
 
 Schema = require("./schema")
 
@@ -94,14 +96,20 @@ module.exports = (directories, cmd) ->
                     console.error "ERROR: #{filePath} is not valid according to schema: #{schemaPath}"
                     return
 
-
             content.__potato_isfile = true
 
             if parts.length == 0
+                if schema[schemaPath]? and not content.__potato_isarray and not content.__potato_isasset
+                    obj.__potato_schema = schema[schemaPath]
+
                 # put it in base
                 obj = nestedObject obj, [path.basename(file, ".json")], content
             else
                 obj = nestedObject obj, parts.concat(path.basename(file, ".json")), content
+
+                if schema[schemaPath] and not content.__potato_isarray and not content.__potato_isasset
+                    current = nestedObjectGetValue obj, parts
+                    obj = nestedObject obj, parts, Object.assign({__potato_schema: schema[schemaPath]}, current)
 
         # done building structure...
         outputFile = path.resolve process.cwd(), outputPath, if packAsJson then "#{objName}.json" else "#{objName}.potato"

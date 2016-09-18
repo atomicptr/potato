@@ -52,6 +52,15 @@ module.exports = (potatoFile, outputPath, cmd) ->
                 mkdirp.sync(outputPath)
 
                 for key in Object.keys obj
+                    # restore schema
+                    if key == "__potato_schema"
+                        schemaPath = path.resolve outputPath, key
+                        data = JSON.stringify obj[key], null, "    "
+                        fs.writeFileSync schemaPath, data
+                        if not quiet
+                            console.log "\tunpacked schema at #{schemaPath}"
+                        continue
+
                     if key.indexOf("__potato") > -1
                         continue
 
