@@ -1,6 +1,6 @@
 {
     "name": "potato-pack",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "A tool to pack a file based json database into one big file, with potatoes.",
     "scripts": {
         "watch": "coffee -o dist -cw src",
@@ -21,6 +21,7 @@
     "bin": {
         "potato": "bin/potato"
     },
+    "main": "lib/index.js",
     "preferGlobal": true,
     "repository": {
         "type" : "git",
